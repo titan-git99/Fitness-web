@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ردیاب تمرینات باشگاه</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-dumbbell"></i>
+                <span>ردیاب تمرینات</span>
+            </div>
+            <div class="nav-menu">
+                <button class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </button>
+                <button class="nav-link" data-page="add-exercise">
+                    <i class="fas fa-plus"></i>
+                    <span>تمرین جدید</span>
+                </button>
+                <button class="nav-link" data-page="workout-plan">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>پلن تمرینی</span>
+                </button>
+                <button class="nav-link" data-page="timer">
+                    <i class="fas fa-stopwatch"></i>
+                    <span>تایمر</span>
+                </button>
+                <button class="nav-link" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>تاریخچه</span>
+                </button>
+                <button class="nav-link" data-page="stats">
+                    <i class="fas fa-chart-line"></i>
+                    <span>آمار</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">داشبورد</h1>
+                <p class="page-subtitle">خلاصه تمرینات امروز</p>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="today-exercises">0</h3>
+                        <p class="stat-label">تمرین امروز</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-weight-hanging"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="today-weight">0 کیلوگرم</h3>
+                        <p class="stat-label">وزن کل امروز</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="total-exercises">0</h3>
+                        <p class="stat-label">مجموع تمرینات</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="best-exercise">-</h3>
+                        <p class="stat-label">بهترین تمرین</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">تمرینات امروز</h2>
+                <div class="quick-actions">
+                    <button class="btn-primary" onclick="showPage('add-exercise')">
+                        <i class="fas fa-plus"></i>
+                        تمرین جدید
+                    </button>
+                    <button class="btn-secondary" onclick="showPage('history')">
+                        <i class="fas fa-eye"></i>
+                        مشاهده همه
+                    </button>
+                </div>
+                <div id="today-exercises-list" class="exercise-list">
+                    <!-- Today's exercises will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Exercise Page -->
+        <div id="add-exercise-page" class="page">
+            <div class="page-header">
+                <h1 class="page-title">تمرین جدید</h1>
+                <p class="page-subtitle">جزئیات تمرین خود را ثبت کنید</p>
+            </div>
+
+            <div class="form-container">
+                <form id="exercise-form" class="exercise-form">
+                    <div class="form-group">
+                        <label for="exercise-session" class="form-label">جلسه</label>
+                        <select id="exercise-session" name="session" class="form-select" required>
+                            <option value="">انتخاب کنید</option>
+                            <option value="A">جلسه A</option>
+                            <option value="B">جلسه B</option>
+                            <option value="C">جلسه C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise-name" class="form-label">نام تمرین</label>
+                        <select id="exercise-name" name="name" class="form-select" required>
+                            <option value="">ابتدا جلسه را انتخاب کنید</option>
+                            
+                            <!-- جلسه A -->
+                            <optgroup label="جلسه A">
+                                <option value="اسکات پا (هالتر)" data-session="A">اسکات پا (هالتر)</option>
+                                <option value="پرس سینه هالتر" data-session="A">پرس سینه هالتر</option>
+                                <option value="پارویی هالتر" data-session="A">پارویی هالتر</option>
+                                <option value="سربازی دمبل نشسته" data-session="A">سربازی دمبل نشسته</option>
+                                <option value="جلو بازو هالتر" data-session="A">جلو بازو هالتر</option>
+                                <option value="کشش صورت" data-session="A">کشش صورت</option>
+                            </optgroup>
+                            
+                            <!-- جلسه B -->
+                            <optgroup label="جلسه B">
+                                <option value="ددلیفت رومانیایی" data-session="B">ددلیفت رومانیایی</option>
+                                <option value="پرس سرشانه هالتر" data-session="B">پرس سرشانه هالتر</option>
+                                <option value="زیربغل کش" data-session="B">زیربغل کش</option>
+                                <option value="پرس سینه شیبدار" data-session="B">پرس سینه شیبدار</option>
+                                <option value="پشت بازو دمبل" data-session="B">پشت بازو دمبل</option>
+                                <option value="پارویی با حمایت سینه" data-session="B">پارویی با حمایت سینه</option>
+                            </optgroup>
+                            
+                            <!-- جلسه C -->
+                            <optgroup label="جلسه C">
+                                <option value="لنگ دمبل" data-session="C">لنگ دمبل</option>
+                                <option value="پرس سینه دمبل" data-session="C">پرس سینه دمبل</option>
+                                <option value="پارویی دمبل تک‌دست" data-session="C">پارویی دمبل تک‌دست</option>
+                                <option value="رفرف جانبی" data-session="C">رفرف جانبی</option>
+                                <option value="هامر کرل" data-session="C">هامر کرل</option>
+                                <option value="پل باسن" data-session="C">پل باسن</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise-date" class="form-label">تاریخ</label>
+                        <input type="date" id="exercise-date" name="date" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise-time" class="form-label">زمان</label>
+                        <input type="time" id="exercise-time" name="time" class="form-input" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exercise-weight" class="form-label">وزن (کیلوگرم)</label>
+                            <input type="number" id="exercise-weight" name="weight" class="form-input" 
+                                   placeholder="0" min="0" step="0.5" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exercise-sets" class="form-label">تعداد ست</label>
+                            <input type="number" id="exercise-sets" name="sets" class="form-input" 
+                                   placeholder="1" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="exercise-reps" class="form-label">تعداد تکرار</label>
+                            <input type="number" id="exercise-reps" name="reps" class="form-input" 
+                                   placeholder="10" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exercise-notes" class="form-label">توضیحات (اختیاری)</label>
+                        <textarea id="exercise-notes" name="notes" class="form-textarea" 
+                                  placeholder="یادداشت‌های اضافی..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="clearForm()">
+                            <i class="fas fa-times"></i>
+                            پاک کردن
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            ذخیره تمرین
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Workout Plan Page -->
+        <div id="workout-plan-page" class="page">
+            <div class="page-header">
+                <h1 class="page-title">پلن تمرینی</h1>
+                <p class="page-subtitle">برنامه کامل تمرینات هفتگی</p>
+            </div>
+
+            <div class="workout-plan-container">
+                <!-- Session Tabs -->
+                <div class="session-tabs">
+                    <button class="session-tab active" data-session="A">
+                        <span class="session-letter">A</span>
+                        <span class="session-name">جلسه A</span>
+                    </button>
+                    <button class="session-tab" data-session="B">
+                        <span class="session-letter">B</span>
+                        <span class="session-name">جلسه B</span>
+                    </button>
+                    <button class="session-tab" data-session="C">
+                        <span class="session-letter">C</span>
+                        <span class="session-name">جلسه C</span>
+                    </button>
+                </div>
+
+                <!-- Session Content -->
+                <div id="session-A" class="session-content active">
+                    <h2 class="session-title">جلسه A - تقویت عضلات اصلی</h2>
+                    <div class="exercise-table">
+                        <div class="table-header">
+                            <div class="table-cell">حرکت</div>
+                            <div class="table-cell">عضله هدف</div>
+                            <div class="table-cell">ست</div>
+                            <div class="table-cell">تکرار</div>
+                            <div class="table-cell">استراحت</div>
+                            <div class="table-cell">عمل</div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">اسکات پا (هالتر)</div>
+                            <div class="table-cell">چهارسر ران، گلوت</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲–۳ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('اسکات پا (هالتر)', 'A')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پرس سینه هالتر</div>
+                            <div class="table-cell">سینه</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲–۳ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پرس سینه هالتر', 'A')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پارویی هالتر</div>
+                            <div class="table-cell">پشت</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پارویی هالتر', 'A')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">سربازی دمبل نشسته</div>
+                            <div class="table-cell">شانه</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('سربازی دمبل نشسته', 'A')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">جلو بازو هالتر</div>
+                            <div class="table-cell">بایسپس</div>
+                            <div class="table-cell">۲</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۹۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('جلو بازو هالتر', 'A')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">کشش صورت</div>
+                            <div class="table-cell">شانه عقبی</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۲–۱۵</div>
+                            <div class="table-cell">۶۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('کشش صورت', 'A')">افزودن</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="session-B" class="session-content">
+                    <h2 class="session-title">جلسه B - تقویت عضلات پشتی</h2>
+                    <div class="exercise-table">
+                        <div class="table-header">
+                            <div class="table-cell">حرکت</div>
+                            <div class="table-cell">عضله هدف</div>
+                            <div class="table-cell">ست</div>
+                            <div class="table-cell">تکرار</div>
+                            <div class="table-cell">استراحت</div>
+                            <div class="table-cell">عمل</div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">ددلیفت رومانیایی</div>
+                            <div class="table-cell">همسترنگ، گلوت</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲–۳ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('ددلیفت رومانیایی', 'B')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پرس سرشانه هالتر</div>
+                            <div class="table-cell">شانه</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲–۳ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پرس سرشانه هالتر', 'B')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">زیربغل کش</div>
+                            <div class="table-cell">پشت پایین</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('زیربغل کش', 'B')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پرس سینه شیبدار</div>
+                            <div class="table-cell">سینه بالا</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پرس سینه شیبدار', 'B')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پشت بازو دمبل</div>
+                            <div class="table-cell">ترایسپس</div>
+                            <div class="table-cell">۲</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۹۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پشت بازو دمبل', 'B')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پارویی با حمایت سینه</div>
+                            <div class="table-cell">پشت بالا</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۹۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پارویی با حمایت سینه', 'B')">افزودن</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="session-C" class="session-content">
+                    <h2 class="session-title">جلسه C - تقویت عضلات پایینی</h2>
+                    <div class="exercise-table">
+                        <div class="table-header">
+                            <div class="table-cell">حرکت</div>
+                            <div class="table-cell">عضله هدف</div>
+                            <div class="table-cell">ست</div>
+                            <div class="table-cell">تکرار</div>
+                            <div class="table-cell">استراحت</div>
+                            <div class="table-cell">عمل</div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">لنگ دمبل</div>
+                            <div class="table-cell">ران، گلوت</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰/هر پا</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('لنگ دمبل', 'C')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پرس سینه دمبل</div>
+                            <div class="table-cell">سینه</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۸–۱۰</div>
+                            <div class="table-cell">۲–۳ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پرس سینه دمبل', 'C')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پارویی دمبل تک‌دست</div>
+                            <div class="table-cell">پشت</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰/هر دست</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پارویی دمبل تک‌دست', 'C')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">رفرف جانبی</div>
+                            <div class="table-cell">شانه جانبی</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۲–۱۵</div>
+                            <div class="table-cell">۹۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('رفرف جانبی', 'C')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">هامر کرل</div>
+                            <div class="table-cell">بایسپس/براشیالیس</div>
+                            <div class="table-cell">۲</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۹۰ ثانیه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('هامر کرل', 'C')">افزودن</button></div>
+                        </div>
+                        <div class="table-row">
+                            <div class="table-cell">پل باسن</div>
+                            <div class="table-cell">گلوتئوس</div>
+                            <div class="table-cell">۳</div>
+                            <div class="table-cell">۱۰–۱۲</div>
+                            <div class="table-cell">۲ دقیقه</div>
+                            <div class="table-cell"><button class="btn-small" onclick="addExerciseToPlan('پل باسن', 'C')">افزودن</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timer Page -->
+        <div id="timer-page" class="page">
+            <div class="page-header">
+                <h1 class="page-title">تایمر تمرین</h1>
+                <p class="page-subtitle">تایمر استراحت بین ست‌ها</p>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-display">
+                    <div class="timer-time" id="timer-display">00:00</div>
+                    <div class="timer-label" id="timer-label">آماده شروع</div>
+                </div>
+                
+                <div class="timer-controls">
+                    <div class="time-inputs">
+                        <div class="time-group">
+                            <label>دقیقه</label>
+                            <input type="number" id="timer-minutes" value="2" min="0" max="59">
+                        </div>
+                        <div class="time-group">
+                            <label>ثانیه</label>
+                            <input type="number" id="timer-seconds" value="0" min="0" max="59">
+                        </div>
+                    </div>
+                    
+                    <div class="preset-buttons">
+                        <button class="preset-btn" onclick="setTimer(60)">۱ دقیقه</button>
+                        <button class="preset-btn" onclick="setTimer(120)">۲ دقیقه</button>
+                        <button class="preset-btn" onclick="setTimer(180)">۳ دقیقه</button>
+                        <button class="preset-btn" onclick="setTimer(90)">۹۰ ثانیه</button>
+                    </div>
+                    
+                    <div class="control-buttons">
+                        <button id="start-timer" class="btn-primary" onclick="startTimer()">
+                            <i class="fas fa-play"></i>
+                            شروع
+                        </button>
+                        <button id="pause-timer" class="btn-secondary" onclick="pauseTimer()" disabled>
+                            <i class="fas fa-pause"></i>
+                            توقف
+                        </button>
+                        <button id="reset-timer" class="btn-secondary" onclick="resetTimer()">
+                            <i class="fas fa-stop"></i>
+                            ریست
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="timer-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="timer-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Page -->
+        <div id="history-page" class="page">
+            <div class="page-header">
+                <h1 class="page-title">تاریخچه تمرینات</h1>
+                <p class="page-subtitle">تمام تمرینات انجام شده</p>
+            </div>
+
+            <div class="filters-container">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label class="filter-label">فیلتر تاریخ:</label>
+                        <input type="date" id="filter-start-date" class="form-input" placeholder="از تاریخ">
+                        <span class="filter-separator">تا</span>
+                        <input type="date" id="filter-end-date" class="form-input" placeholder="تا تاریخ">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">تمرین:</label>
+                        <select id="filter-exercise" class="form-select">
+                            <option value="">همه تمرینات</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-primary" onclick="applyFilters()">
+                            <i class="fas fa-filter"></i>
+                            اعمال فیلتر
+                        </button>
+                        <button class="btn-secondary" onclick="clearFilters()">
+                            <i class="fas fa-times"></i>
+                            پاک کردن
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-content">
+                <div id="exercise-list" class="exercise-list">
+                    <!-- Exercises will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Page -->
+        <div id="stats-page" class="page">
+            <div class="page-header">
+                <h1 class="page-title">آمار و نمودارها</h1>
+                <p class="page-subtitle">پیشرفت خود را دنبال کنید</p>
+            </div>
+
+            <div class="stats-controls">
+                <div class="stats-filter">
+                    <label class="filter-label">انتخاب تمرین:</label>
+                    <select id="stats-exercise-filter" class="form-select" onchange="updateProgressChart()">
+                        <option value="">همه تمرینات</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stats-card">
+                    <h3 class="stats-card-title">پیشرفت وزن در طول زمان</h3>
+                    <canvas id="progress-chart"></canvas>
+                </div>
+
+                <div class="stats-card">
+                    <h3 class="stats-card-title">مقایسه عملکرد</h3>
+                    <canvas id="comparison-chart"></canvas>
+                </div>
+
+                <div class="stats-summary">
+                    <h3 class="stats-card-title">خلاصه آمار</h3>
+                    <div class="summary-stats" id="summary-stats">
+                        <!-- Summary stats will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal for Edit/Delete -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">ویرایش تمرین</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content" id="modal-content">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/app.js"></script>
+</body>
+</html>
